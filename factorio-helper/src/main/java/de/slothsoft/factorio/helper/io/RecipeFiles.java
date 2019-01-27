@@ -2,8 +2,6 @@ package de.slothsoft.factorio.helper.io;
 
 public interface RecipeFiles {
 
-	String FOLDER = "src/test/resources/recipes/";
-
 	String FILE_AMMO = "/recipes/ammo.lua";
 	String FILE_CAPSULE = "/recipes/capsule.lua";
 	String FILE_EQUIPMENT = "/recipes/equipment.lua";

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -19,12 +20,17 @@ import org.luaj.vm2.lib.jse.JsePlatform;
 
 import de.slothsoft.factorio.helper.pojo.Ingredient;
 import de.slothsoft.factorio.helper.pojo.Recipe;
+import de.slothsoft.factorio.helper.pojo.Result;
 
 public class LuaRecipeReader implements RecipeReader {
 
 	private static final String KEY_RECIPE = "recipe";
 	private static final String KEY_NORMAL_COSTS = "normal";
 	private static final String KEY_INGREDIENTS = "ingredients";
+	private static final String KEY_NAME = "name";
+	private static final String KEY_AMOUNT = "amount";
+	private static final String KEY_RESULT = "result";
+	private static final String KEY_RESULTS = "results";
 
 	private final Globals globals = JsePlatform.standardGlobals();
 	private String prefix;
@@ -42,13 +48,14 @@ public class LuaRecipeReader implements RecipeReader {
 				this.prefix = readLines(in);
 			}
 		}
-
 		final List<Recipe> result = new ArrayList<>();
 
 		final LuaValue inputChunk = this.globals.load(this.prefix + "\n" + input + this.suffix);
 		final LuaTable resultChunk = inputChunk.call().checktable().get(KEY_RECIPE).checktable();
 		forEachKeyValue(resultChunk, (key, value) -> result.add(convertToRecipe(key, value)));
+
 		result.sort(Comparator.comparing(Recipe::getId));
+
 		return result;
 	}
 
@@ -72,24 +79,55 @@ public class LuaRecipeReader implements RecipeReader {
 	}
 
 	private static Recipe convertToRecipe(LuaValue key, LuaValue value) {
-		final Recipe recipe = new Recipe(key.tojstring());
-
-		final List<Ingredient> ingredients = new ArrayList<>();
-
 		// sometimes there are tables for "normal" and "expensive"... and sometimes not
 		final LuaValue costsChunk = value.get(KEY_NORMAL_COSTS);
-		final LuaTable ingredientsChunk = costsChunk.isnil()
-				? value.get(KEY_INGREDIENTS).checktable()
-				: costsChunk.checktable().get(KEY_INGREDIENTS).checktable();
-		forEachKeyValue(ingredientsChunk, (k, v) -> ingredients.add(convertToIngredient(v)));
+		final LuaTable costsTable = costsChunk.isnil() ? value.checktable() : costsChunk.checktable();
 
-		return recipe.ingredients(ingredients);
+		final Recipe recipe = new Recipe(key.tojstring());
+		recipe.ingredients(convertToIngredients(costsTable));
+		recipe.results(convertToResults(costsTable));
+		return recipe;
+	}
+
+	private static List<Ingredient> convertToIngredients(LuaTable costsTable) {
+		final LuaTable ingredientsTable = costsTable.get(KEY_INGREDIENTS).checktable();
+
+		final List<Ingredient> ingredients = new ArrayList<>();
+		forEachKeyValue(ingredientsTable, (k, v) -> ingredients.add(convertToIngredient(v)));
+		return ingredients;
 	}
 
 	private static Ingredient convertToIngredient(LuaValue value) {
-		final Ingredient ingredient = new Ingredient(value.get(1).tojstring());
+		final LuaValue id = value.get(1);
+		if (id.isnil()) {
+			// the ingredient is a fluid. the format is approximately:
+			// {type="fluid", name="lubricant", amount=10}
+			final Ingredient ingredient = new Ingredient(value.get(KEY_NAME).tojstring());
+			ingredient.setAmount(value.get(KEY_AMOUNT).toint());
+			return ingredient;
+		}
+		// the ingredient is a standard thingy
+		final Ingredient ingredient = new Ingredient(id.tojstring());
 		ingredient.setAmount(value.get(2).toint());
 		return ingredient;
+	}
+
+	private static List<Result> convertToResults(LuaTable costsTable) {
+		final LuaValue singleResult = costsTable.get(KEY_RESULT);
+		if (!singleResult.isnil()) return Arrays.asList(new Result(singleResult.tojstring()));
+
+		final LuaTable resultTable = costsTable.get(KEY_RESULTS).checktable();
+		final List<Result> results = new ArrayList<>();
+		forEachKeyValue(resultTable, (k, v) -> results.add(convertToResult(v)));
+		return results;
+	}
+
+	private static Result convertToResult(LuaValue value) {
+		// the result is a fluid. the format is approximately:
+		// {type="fluid", name="heavy-oil", amount=30}
+		final Result result = new Result(value.get(KEY_NAME).tojstring());
+		result.setAmount(value.get(KEY_AMOUNT).toint());
+		return result;
 	}
 
 }

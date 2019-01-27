@@ -8,6 +8,7 @@ public class Recipe {
 
 	private String id;
 	private List<Ingredient> ingredients = Collections.emptyList();
+	private List<Result> results = Collections.emptyList();
 
 	public Recipe(String id) {
 		this.id = Objects.requireNonNull(id);
@@ -39,9 +40,23 @@ public class Recipe {
 		this.ingredients = Objects.requireNonNull(ingredients);
 	}
 
+	public List<Result> getResults() {
+		return this.results;
+	}
+
+	public Recipe results(List<Result> newResults) {
+		setResults(newResults);
+		return this;
+	}
+
+	public void setResults(List<Result> results) {
+		this.results = Objects.requireNonNull(results);
+	}
+
 	@Override
 	public String toString() {
-		return "Recipe [id=" + this.id + ", ingredients=" + this.ingredients.size() + "]";
+		return "Recipe [id=" + this.id + ", ingredients=" + this.ingredients.size() + ", results=" + this.results.size()
+				+ "]";
 	}
 
 }

@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import de.slothsoft.factorio.helper.pojo.Ingredient;
 import de.slothsoft.factorio.helper.pojo.Recipe;
+import de.slothsoft.factorio.helper.pojo.Result;
 
 public class LuaRecipeReaderTest {
 
@@ -51,11 +52,17 @@ public class LuaRecipeReaderTest {
 			Assert.assertEquals("steel-plate", recipe.getId());
 			Assert.assertNotNull(recipe.getIngredients());
 			Assert.assertEquals(1, recipe.getIngredients().size());
+			Assert.assertEquals(1, recipe.getResults().size());
 
 			final Ingredient ingredient = recipe.getIngredients().get(0);
 			Assert.assertNotNull(ingredient);
 			Assert.assertEquals("iron-plate", ingredient.getId());
 			Assert.assertEquals(5, ingredient.getAmount());
+
+			final Result result = recipe.getResults().get(0);
+			Assert.assertNotNull(result);
+			Assert.assertEquals("steel-plate", result.getId());
+			Assert.assertEquals(1, result.getAmount());
 		}
 	}
 
@@ -71,6 +78,7 @@ public class LuaRecipeReaderTest {
 			Assert.assertEquals("piercing-rounds-magazine", recipe.getId());
 			Assert.assertNotNull(recipe.getIngredients());
 			Assert.assertEquals(3, recipe.getIngredients().size());
+			Assert.assertEquals(1, recipe.getResults().size());
 
 			Ingredient ingredient = recipe.getIngredients().get(0);
 			Assert.assertNotNull(ingredient);
@@ -86,6 +94,11 @@ public class LuaRecipeReaderTest {
 			Assert.assertNotNull(ingredient);
 			Assert.assertEquals("copper-plate", ingredient.getId());
 			Assert.assertEquals(5, ingredient.getAmount());
+
+			final Result result = recipe.getResults().get(0);
+			Assert.assertNotNull(result);
+			Assert.assertEquals("piercing-rounds-magazine", result.getId());
+			Assert.assertEquals(1, result.getAmount());
 		}
 	}
 
@@ -101,6 +114,7 @@ public class LuaRecipeReaderTest {
 			Assert.assertEquals("poison-capsule", recipe.getId());
 			Assert.assertNotNull(recipe.getIngredients());
 			Assert.assertEquals(3, recipe.getIngredients().size());
+			Assert.assertEquals(1, recipe.getResults().size());
 
 			Ingredient ingredient = recipe.getIngredients().get(0);
 			Assert.assertNotNull(ingredient);
@@ -116,6 +130,11 @@ public class LuaRecipeReaderTest {
 			Assert.assertNotNull(ingredient);
 			Assert.assertEquals("coal", ingredient.getId());
 			Assert.assertEquals(10, ingredient.getAmount());
+
+			final Result result = recipe.getResults().get(0);
+			Assert.assertNotNull(result);
+			Assert.assertEquals("poison-capsule", result.getId());
+			Assert.assertEquals(1, result.getAmount());
 		}
 	}
 
@@ -131,6 +150,7 @@ public class LuaRecipeReaderTest {
 			Assert.assertEquals("night-vision-equipment", recipe.getId());
 			Assert.assertNotNull(recipe.getIngredients());
 			Assert.assertEquals(2, recipe.getIngredients().size());
+			Assert.assertEquals(1, recipe.getResults().size());
 
 			Ingredient ingredient = recipe.getIngredients().get(0);
 			Assert.assertNotNull(ingredient);
@@ -141,6 +161,11 @@ public class LuaRecipeReaderTest {
 			Assert.assertNotNull(ingredient);
 			Assert.assertEquals("steel-plate", ingredient.getId());
 			Assert.assertEquals(10, ingredient.getAmount());
+
+			final Result result = recipe.getResults().get(0);
+			Assert.assertNotNull(result);
+			Assert.assertEquals("night-vision-equipment", result.getId());
+			Assert.assertEquals(1, result.getAmount());
 		}
 	}
 
@@ -156,11 +181,27 @@ public class LuaRecipeReaderTest {
 			Assert.assertEquals("basic-oil-processing", recipe.getId());
 			Assert.assertNotNull(recipe.getIngredients());
 			Assert.assertEquals(1, recipe.getIngredients().size());
+			Assert.assertEquals(3, recipe.getResults().size());
 
 			final Ingredient ingredient = recipe.getIngredients().get(0);
 			Assert.assertNotNull(ingredient);
 			Assert.assertEquals("crude-oil", ingredient.getId());
 			Assert.assertEquals(100, ingredient.getAmount());
+
+			Result result = recipe.getResults().get(0);
+			Assert.assertNotNull(result);
+			Assert.assertEquals("heavy-oil", result.getId());
+			Assert.assertEquals(30, result.getAmount());
+
+			result = recipe.getResults().get(1);
+			Assert.assertNotNull(result);
+			Assert.assertEquals("light-oil", result.getId());
+			Assert.assertEquals(30, result.getAmount());
+
+			result = recipe.getResults().get(2);
+			Assert.assertNotNull(result);
+			Assert.assertEquals("petroleum-gas", result.getId());
+			Assert.assertEquals(40, result.getAmount());
 		}
 	}
 
@@ -176,11 +217,17 @@ public class LuaRecipeReaderTest {
 			Assert.assertEquals("steel-plate", recipe.getId());
 			Assert.assertNotNull(recipe.getIngredients());
 			Assert.assertEquals(1, recipe.getIngredients().size());
+			Assert.assertEquals(1, recipe.getResults().size());
 
 			final Ingredient ingredient = recipe.getIngredients().get(0);
 			Assert.assertNotNull(ingredient);
 			Assert.assertEquals("iron-plate", ingredient.getId());
 			Assert.assertEquals(5, ingredient.getAmount());
+
+			final Result result = recipe.getResults().get(0);
+			Assert.assertNotNull(result);
+			Assert.assertEquals("steel-plate", result.getId());
+			Assert.assertEquals(1, result.getAmount());
 		}
 	}
 
@@ -196,6 +243,7 @@ public class LuaRecipeReaderTest {
 			Assert.assertEquals("long-handed-inserter", recipe.getId());
 			Assert.assertNotNull(recipe.getIngredients());
 			Assert.assertEquals(3, recipe.getIngredients().size());
+			Assert.assertEquals(1, recipe.getResults().size());
 
 			Ingredient ingredient = recipe.getIngredients().get(0);
 			Assert.assertNotNull(ingredient);
@@ -211,6 +259,11 @@ public class LuaRecipeReaderTest {
 			Assert.assertNotNull(ingredient);
 			Assert.assertEquals("inserter", ingredient.getId());
 			Assert.assertEquals(1, ingredient.getAmount());
+
+			final Result result = recipe.getResults().get(0);
+			Assert.assertNotNull(result);
+			Assert.assertEquals("long-handed-inserter", result.getId());
+			Assert.assertEquals(1, result.getAmount());
 		}
 	}
 
@@ -226,6 +279,7 @@ public class LuaRecipeReaderTest {
 			Assert.assertEquals("speed-module", recipe.getId());
 			Assert.assertNotNull(recipe.getIngredients());
 			Assert.assertEquals(2, recipe.getIngredients().size());
+			Assert.assertEquals(1, recipe.getResults().size());
 
 			Ingredient ingredient = recipe.getIngredients().get(0);
 			Assert.assertNotNull(ingredient);
@@ -236,6 +290,11 @@ public class LuaRecipeReaderTest {
 			Assert.assertNotNull(ingredient);
 			Assert.assertEquals("electronic-circuit", ingredient.getId());
 			Assert.assertEquals(5, ingredient.getAmount());
+
+			final Result result = recipe.getResults().get(0);
+			Assert.assertNotNull(result);
+			Assert.assertEquals("speed-module", result.getId());
+			Assert.assertEquals(1, result.getAmount());
 		}
 	}
 
@@ -251,6 +310,7 @@ public class LuaRecipeReaderTest {
 			Assert.assertEquals("player-port", recipe.getId());
 			Assert.assertNotNull(recipe.getIngredients());
 			Assert.assertEquals(3, recipe.getIngredients().size());
+			Assert.assertEquals(1, recipe.getResults().size());
 
 			Ingredient ingredient = recipe.getIngredients().get(0);
 			Assert.assertNotNull(ingredient);
@@ -266,6 +326,11 @@ public class LuaRecipeReaderTest {
 			Assert.assertNotNull(ingredient);
 			Assert.assertEquals("iron-plate", ingredient.getId());
 			Assert.assertEquals(1, ingredient.getAmount());
+
+			final Result result = recipe.getResults().get(0);
+			Assert.assertNotNull(result);
+			Assert.assertEquals("player-port", result.getId());
+			Assert.assertEquals(1, result.getAmount());
 		}
 	}
 
@@ -281,6 +346,7 @@ public class LuaRecipeReaderTest {
 			Assert.assertEquals("laser-turret", recipe.getId());
 			Assert.assertNotNull(recipe.getIngredients());
 			Assert.assertEquals(3, recipe.getIngredients().size());
+			Assert.assertEquals(1, recipe.getResults().size());
 
 			Ingredient ingredient = recipe.getIngredients().get(0);
 			Assert.assertNotNull(ingredient);
@@ -296,13 +362,18 @@ public class LuaRecipeReaderTest {
 			Assert.assertNotNull(ingredient);
 			Assert.assertEquals("battery", ingredient.getId());
 			Assert.assertEquals(12, ingredient.getAmount());
+
+			final Result result = recipe.getResults().get(0);
+			Assert.assertNotNull(result);
+			Assert.assertEquals("laser-turret", result.getId());
+			Assert.assertEquals(1, result.getAmount());
 		}
 	}
 
 	@Test
 	public void testReadAll() throws IOException {
 		Assert.assertEquals("Test folder has more files than there are tests!",
-				new File(RecipeFiles.FOLDER).list().length, RecipeFiles.FILES.length);
+				new File("src/main/resources/recipes/").list().length, RecipeFiles.FILES.length);
 
 		for (final String file : RecipeFiles.FILES) {
 			try (final InputStream input = getClass().getResourceAsStream(file)) {
