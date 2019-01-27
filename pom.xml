@@ -7,7 +7,8 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>factorio-helper</module>
+		<module>core</module>
+		<module>ui</module>
 	</modules>
 
 	<properties>
@@ -17,6 +18,12 @@
 
 	<dependencyManagement>
 		<dependencies>
+			<dependency>
+				<groupId>de.slothsoft.factorio</groupId>
+				<artifactId>core</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
 			<dependency>
 				<groupId>junit</groupId>
 				<artifactId>junit</artifactId>
