@@ -2,7 +2,7 @@ package de.slothsoft.factorio.helper;
 
 import java.util.Objects;
 
-public class Result {
+public class Result implements HasAmount {
 
 	private String id;
 	private int amount = 1;
@@ -11,6 +11,7 @@ public class Result {
 		this.id = Objects.requireNonNull(id);
 	}
 
+	@Override
 	public int getAmount() {
 		return this.amount;
 	}
@@ -24,6 +25,7 @@ public class Result {
 		this.amount = amount;
 	}
 
+	@Override
 	public String getId() {
 		return this.id;
 	}

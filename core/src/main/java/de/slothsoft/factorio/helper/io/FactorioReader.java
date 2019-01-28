@@ -1,7 +1,10 @@
 package de.slothsoft.factorio.helper.io;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
-import java.util.function.Supplier;
+import java.util.PropertyResourceBundle;
+import java.util.ResourceBundle;
 import java.util.stream.Stream;
 
 public interface FactorioReader {
@@ -12,7 +15,7 @@ public interface FactorioReader {
 	 * @return a input stream with the above contents
 	 */
 
-	InputStream createDataLoaderStream();
+	InputStream createDataLoaderStream() throws IOException;
 
 	/**
 	 * Returns file names or any other kind of ID for each individual recipe file.
@@ -20,7 +23,7 @@ public interface FactorioReader {
 	 * @return an array of file names
 	 */
 
-	String[] getAllRecipeFileNames();
+	String[] getAllRecipeFileNames() throws IOException;
 
 	/**
 	 * Reads the recipe file with the file name (or ID) specified in
@@ -31,7 +34,7 @@ public interface FactorioReader {
 	 * @return a input stream with the recipe contents
 	 */
 
-	InputStream createRecipeFileStream(String recipeFileName);
+	InputStream createRecipeFileStream(String recipeFileName) throws IOException;
 
 	/**
 	 * Creates a stream for each recipe find in {@link #getAllRecipeFileNames()} and makes
@@ -41,14 +44,14 @@ public interface FactorioReader {
 	 * @return a stream with the recipe contents supplier
 	 */
 
-	default Stream<Supplier<InputStream>> getAllRecipeFileStreams() {
-		return Stream.of(getAllRecipeFileNames()).map(recipeFileName -> new Supplier<InputStream>() {
-
-			@Override
-			public InputStream get() {
-				return createRecipeFileStream(recipeFileName);
-			}
-		});
+	default Stream<InputStreamSupplier> getAllRecipeFileStreams() throws IOException {
+		return Stream.of(getAllRecipeFileNames())
+				.map(recipeFileName -> (InputStreamSupplier) () -> createRecipeFileStream(recipeFileName));
 	}
 
+	default ResourceBundle createRecipeLocalization() throws IOException {
+		try (InputStream input = new ByteArrayInputStream(new byte[0])) {
+			return new PropertyResourceBundle(input);
+		}
+	}
 }

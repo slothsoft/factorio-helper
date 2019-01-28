@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import de.slothsoft.factorio.helper.Recipe;
@@ -22,11 +21,11 @@ public interface RecipeReader {
 		}
 	}
 
-	default List<Recipe> readRecipes(Stream<Supplier<InputStream>> streamSupplier) throws IOException {
+	default List<Recipe> readRecipes(Stream<InputStreamSupplier> streamSupplier) throws IOException {
 		final List<Recipe> result = new ArrayList<>();
-		final Iterator<Supplier<InputStream>> it = streamSupplier.iterator();
+		final Iterator<InputStreamSupplier> it = streamSupplier.iterator();
 		while (it.hasNext()) {
-			try (InputStream input = it.next().get()) {
+			try (InputStream input = it.next().create()) {
 				result.addAll(readRecipe(input));
 			}
 		}
