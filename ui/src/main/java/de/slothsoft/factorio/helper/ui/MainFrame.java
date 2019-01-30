@@ -23,8 +23,8 @@ public class MainFrame extends JFrame {
 		final RecipeReader recipeReader = ServiceBuddy.getService(RecipeReader.class);
 		try {
 			final List<Recipe> result = recipeReader.readRecipes(factorioReader.getAllRecipeFileStreams());
-			setContentPane(new RecipesTable().recipies(result));
-
+//			setContentPane(new RecipesTable().recipies(result));
+			setContentPane(new DependencyTree());
 		} catch (final IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

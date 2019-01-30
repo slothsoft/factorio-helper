@@ -20,8 +20,8 @@ public class FactorioTableRenderer extends DefaultTableCellRenderer {
 
 	private static final long serialVersionUID = -6917174496910977755L;
 
-	private final NumberFormat integerFormat = NumberFormat.getIntegerInstance();
-	private ResourceBundle recipeI18n;
+	private static final NumberFormat INTEGER_FORMAT = NumberFormat.getIntegerInstance();
+	private static ResourceBundle recipeI18n;
 
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
@@ -38,29 +38,29 @@ public class FactorioTableRenderer extends DefaultTableCellRenderer {
 		return label;
 	}
 
-	public String stringify(Ingredient ingredient) {
+	public static String stringify(Ingredient ingredient) {
 		final StringBuilder sb = new StringBuilder();
-		sb.append(this.integerFormat.format(ingredient.getAmount()));
+		sb.append(INTEGER_FORMAT.format(ingredient.getAmount()));
 		sb.append("x ");
 		sb.append(convertIdToString(ingredient.getId()));
 		return sb.toString();
 	}
 
-	public String stringify(Result result) {
+	public static String stringify(Result result) {
 		final StringBuilder sb = new StringBuilder();
 		sb.append(convertIdToString(result.getId()));
 		if (result.getAmount() != 1) {
 			// we don't need the amount if it's one
-			sb.append(" (").append(this.integerFormat.format(result.getAmount())).append(')');
+			sb.append(" (").append(INTEGER_FORMAT.format(result.getAmount())).append(')');
 		}
 		return sb.toString();
 	}
 
-	public String stringify(Recipe recipe) {
+	public static String stringify(Recipe recipe) {
 		return convertIdToString(recipe.getId());
 	}
 
-	private String convertIdToString(String id) {
+	private static String convertIdToString(String id) {
 		try {
 			return getRecipeI18n().getString(id);
 		} catch (final MissingResourceException e) {
@@ -68,14 +68,19 @@ public class FactorioTableRenderer extends DefaultTableCellRenderer {
 		}
 	}
 
-	ResourceBundle getRecipeI18n() {
-		if (this.recipeI18n == null) {
+	static void setRecipeI18n(ResourceBundle recipeI18n) {
+		FactorioTableRenderer.recipeI18n = recipeI18n;
+	}
+
+	public static ResourceBundle getRecipeI18n() {
+		if (FactorioTableRenderer.recipeI18n == null) {
 			try {
-				this.recipeI18n = ServiceBuddy.getService(FactorioReader.class).createRecipeLocalization();
+				FactorioTableRenderer.recipeI18n = ServiceBuddy.getService(FactorioReader.class)
+						.createRecipeLocalization();
 			} catch (final IOException e) {
 				e.printStackTrace();
 			}
 		}
-		return this.recipeI18n;
+		return FactorioTableRenderer.recipeI18n;
 	}
 }

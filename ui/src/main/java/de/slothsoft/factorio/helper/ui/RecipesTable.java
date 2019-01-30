@@ -1,7 +1,7 @@
 package de.slothsoft.factorio.helper.ui;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
+import java.awt.Graphics;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -18,13 +18,27 @@ public class RecipesTable extends JPanel {
 
 	private static final long serialVersionUID = 5983220261999043174L;
 
-	final JTable table = new JTable();
+	final JTable table = new JTable() {
+
+		private static final long serialVersionUID = 9105274729488461394L;
+
+		@Override
+		protected void paintComponent(Graphics g) {
+			super.paintComponent(g);
+
+			if (RecipesTable.this.emptyMessage != null && getRecipies().isEmpty()) {
+				final int height = g.getFontMetrics().getHeight();
+				g.drawString(RecipesTable.this.emptyMessage, 10, height);
+			}
+		}
+
+	};
 	final RecipesTableModel tableModel = new RecipesTableModel();
+	String emptyMessage;
 
 	public RecipesTable() {
 		super(new BorderLayout());
 
-		this.table.setPreferredScrollableViewportSize(new Dimension(1000, 600));
 		this.table.setFillsViewportHeight(true);
 		this.table.setModel(this.tableModel);
 		this.table.setDefaultRenderer(Object.class, new FactorioTableRenderer());
@@ -43,6 +57,19 @@ public class RecipesTable extends JPanel {
 
 	public void setRecipies(List<Recipe> recipies) {
 		this.tableModel.setRecipies(recipies);
+	}
+
+	public String getEmptyMessage() {
+		return this.emptyMessage;
+	}
+
+	public RecipesTable emptyMessage(String newEmptyMessage) {
+		setEmptyMessage(newEmptyMessage);
+		return this;
+	}
+
+	public void setEmptyMessage(String emptyMessage) {
+		this.emptyMessage = emptyMessage;
 	}
 
 	/*
