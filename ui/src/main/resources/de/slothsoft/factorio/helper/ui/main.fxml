@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+
+<?import de.slothsoft.factorio.helper.ui.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/9.0.0"
+	xmlns:fx="http://javafx.com/fxml/1" minHeight="0.0" minWidth="0.0"
+	maxHeight="-Infinity" maxWidth="-Infinity"
+	fx:controller="de.slothsoft.factorio.helper.ui.MainController">
+	<top>
+		<ToolBar>
+			<Button focusTraversable="false" onAction="#showHistory">
+				<graphic>
+					<ImageView>
+						<Image url="@icons/history.png" />
+					</ImageView>
+				</graphic>
+				<tooltip>
+					<Tooltip text="%ShowHistory" />
+				</tooltip>
+			</Button>
+		</ToolBar>
+	</top>
+	<center>
+		<SplitPane BorderPane.alignment="CENTER"
+			orientation="VERTICAL">
+			<RecipesTable fx:id="recipesTable"/>
+			<TextArea />
+		</SplitPane>
+	</center>
+</BorderPane>

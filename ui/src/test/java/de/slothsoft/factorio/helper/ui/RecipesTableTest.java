@@ -13,12 +13,17 @@ import de.slothsoft.factorio.helper.Ingredient;
 import de.slothsoft.factorio.helper.Recipe;
 import de.slothsoft.factorio.helper.Result;
 import de.slothsoft.factorio.helper.io.IOUtils;
+import de.slothsoft.factorio.helper.ui.impl.RecipeCellFactory;
+import javafx.beans.value.ObservableValue;
+import javafx.embed.swing.JFXPanel;
+import javafx.scene.control.TableColumn;
 
 public class RecipesTableTest {
 
 	@BeforeClass
 	public static void setUpClass() throws IOException {
-		FactorioTableRenderer.setRecipeI18n(IOUtils.createEmptyResourceBundle());
+		RecipeCellFactory.setRecipeI18n(IOUtils.createEmptyResourceBundle());
+		new JFXPanel();
 	}
 
 	@Rule
@@ -30,17 +35,24 @@ public class RecipesTableTest {
 		final Recipe recipe = new Recipe(this.testName.getMethodName());
 		this.recipesTable.setRecipies(Arrays.asList(recipe));
 
-		Assert.assertEquals(1, this.recipesTable.table.getColumnCount());
-		Assert.assertEquals(1, this.recipesTable.table.getRowCount());
-		Assert.assertEquals(recipe, this.recipesTable.table.getValueAt(0, 0));
+		Assert.assertEquals(1, this.recipesTable.table.getColumns().size());
+		Assert.assertEquals(1, this.recipesTable.table.getItems().size());
+		Assert.assertEquals(recipe, getValueAt(0, 0));
+	}
+
+	private Object getValueAt(int row, int col) {
+		final Recipe item = this.recipesTable.table.getItems().get(row);
+		final TableColumn<Recipe, ?> column = this.recipesTable.table.getColumns().get(col);
+		final ObservableValue<?> cellValue = column.getCellObservableValue(item);
+		return cellValue == null ? null : cellValue.getValue();
 	}
 
 	@Test
 	public void testSetRecipiesNull() throws Exception {
 		this.recipesTable.setRecipies(Arrays.asList());
 
-		Assert.assertEquals(1, this.recipesTable.table.getColumnCount());
-		Assert.assertEquals(0, this.recipesTable.table.getRowCount());
+		Assert.assertEquals(1, this.recipesTable.table.getColumns().size());
+		Assert.assertEquals(0, this.recipesTable.table.getItems().size());
 	}
 
 	@Test
@@ -50,11 +62,11 @@ public class RecipesTableTest {
 		final Recipe recipe3 = new Recipe(this.testName.getMethodName() + 3);
 		this.recipesTable.setRecipies(Arrays.asList(recipe1, recipe2, recipe3));
 
-		Assert.assertEquals(1, this.recipesTable.table.getColumnCount());
-		Assert.assertEquals(3, this.recipesTable.table.getRowCount());
-		Assert.assertEquals(recipe1, this.recipesTable.table.getValueAt(0, 0));
-		Assert.assertEquals(recipe2, this.recipesTable.table.getValueAt(1, 0));
-		Assert.assertEquals(recipe3, this.recipesTable.table.getValueAt(2, 0));
+		Assert.assertEquals(1, this.recipesTable.table.getColumns().size());
+		Assert.assertEquals(3, this.recipesTable.table.getItems().size());
+		Assert.assertEquals(recipe1, getValueAt(0, 0));
+		Assert.assertEquals(recipe2, getValueAt(1, 0));
+		Assert.assertEquals(recipe3, getValueAt(2, 0));
 	}
 
 	@Test
@@ -67,23 +79,23 @@ public class RecipesTableTest {
 				new Result(id + "E").amount(2), new Result(id + "F").amount(3)));
 		this.recipesTable.setRecipies(Arrays.asList(recipe1, recipe2, recipe3));
 
-		Assert.assertEquals(4, this.recipesTable.table.getColumnCount());
-		Assert.assertEquals(3, this.recipesTable.table.getRowCount());
+		Assert.assertEquals(4, this.recipesTable.table.getColumns().size());
+		Assert.assertEquals(3, this.recipesTable.table.getItems().size());
 
-		Assert.assertEquals(recipe1, this.recipesTable.table.getValueAt(0, 0));
-		Assert.assertEquals(recipe1.getResults().get(0), this.recipesTable.table.getValueAt(0, 1));
-		Assert.assertEquals(null, this.recipesTable.table.getValueAt(0, 2));
-		Assert.assertEquals(null, this.recipesTable.table.getValueAt(0, 3));
+		Assert.assertEquals(recipe1, getValueAt(0, 0));
+		Assert.assertEquals(recipe1.getResults().get(0), getValueAt(0, 1));
+		Assert.assertEquals(null, getValueAt(0, 2));
+		Assert.assertEquals(null, getValueAt(0, 3));
 
-		Assert.assertEquals(recipe2, this.recipesTable.table.getValueAt(1, 0));
-		Assert.assertEquals(recipe2.getResults().get(0), this.recipesTable.table.getValueAt(1, 1));
-		Assert.assertEquals(recipe2.getResults().get(1), this.recipesTable.table.getValueAt(1, 2));
-		Assert.assertEquals(null, this.recipesTable.table.getValueAt(1, 3));
+		Assert.assertEquals(recipe2, getValueAt(1, 0));
+		Assert.assertEquals(recipe2.getResults().get(0), getValueAt(1, 1));
+		Assert.assertEquals(recipe2.getResults().get(1), getValueAt(1, 2));
+		Assert.assertEquals(null, getValueAt(1, 3));
 
-		Assert.assertEquals(recipe3, this.recipesTable.table.getValueAt(2, 0));
-		Assert.assertEquals(recipe3.getResults().get(0), this.recipesTable.table.getValueAt(2, 1));
-		Assert.assertEquals(recipe3.getResults().get(1), this.recipesTable.table.getValueAt(2, 2));
-		Assert.assertEquals(recipe3.getResults().get(2), this.recipesTable.table.getValueAt(2, 3));
+		Assert.assertEquals(recipe3, getValueAt(2, 0));
+		Assert.assertEquals(recipe3.getResults().get(0), getValueAt(2, 1));
+		Assert.assertEquals(recipe3.getResults().get(1), getValueAt(2, 2));
+		Assert.assertEquals(recipe3.getResults().get(2), getValueAt(2, 3));
 	}
 
 	@Test
@@ -96,23 +108,23 @@ public class RecipesTableTest {
 		final Recipe recipe3 = new Recipe(id + 3).ingredients(Arrays.asList(new Ingredient(id + "F").amount(3)));
 		this.recipesTable.setRecipies(Arrays.asList(recipe1, recipe2, recipe3));
 
-		Assert.assertEquals(4, this.recipesTable.table.getColumnCount());
-		Assert.assertEquals(3, this.recipesTable.table.getRowCount());
+		Assert.assertEquals(4, this.recipesTable.table.getColumns().size());
+		Assert.assertEquals(3, this.recipesTable.table.getItems().size());
 
-		Assert.assertEquals(recipe1, this.recipesTable.table.getValueAt(0, 0));
-		Assert.assertEquals(recipe1.getIngredients().get(0), this.recipesTable.table.getValueAt(0, 1));
-		Assert.assertEquals(recipe1.getIngredients().get(1), this.recipesTable.table.getValueAt(0, 2));
-		Assert.assertEquals(null, this.recipesTable.table.getValueAt(0, 3));
+		Assert.assertEquals(recipe1, getValueAt(0, 0));
+		Assert.assertEquals(recipe1.getIngredients().get(0), getValueAt(0, 1));
+		Assert.assertEquals(recipe1.getIngredients().get(1), getValueAt(0, 2));
+		Assert.assertEquals(null, getValueAt(0, 3));
 
-		Assert.assertEquals(recipe2, this.recipesTable.table.getValueAt(1, 0));
-		Assert.assertEquals(recipe2.getIngredients().get(0), this.recipesTable.table.getValueAt(1, 1));
-		Assert.assertEquals(recipe2.getIngredients().get(1), this.recipesTable.table.getValueAt(1, 2));
-		Assert.assertEquals(recipe2.getIngredients().get(2), this.recipesTable.table.getValueAt(1, 3));
+		Assert.assertEquals(recipe2, getValueAt(1, 0));
+		Assert.assertEquals(recipe2.getIngredients().get(0), getValueAt(1, 1));
+		Assert.assertEquals(recipe2.getIngredients().get(1), getValueAt(1, 2));
+		Assert.assertEquals(recipe2.getIngredients().get(2), getValueAt(1, 3));
 
-		Assert.assertEquals(recipe3, this.recipesTable.table.getValueAt(2, 0));
-		Assert.assertEquals(recipe3.getIngredients().get(0), this.recipesTable.table.getValueAt(2, 1));
-		Assert.assertEquals(null, this.recipesTable.table.getValueAt(2, 2));
-		Assert.assertEquals(null, this.recipesTable.table.getValueAt(2, 3));
+		Assert.assertEquals(recipe3, getValueAt(2, 0));
+		Assert.assertEquals(recipe3.getIngredients().get(0), getValueAt(2, 1));
+		Assert.assertEquals(null, getValueAt(2, 2));
+		Assert.assertEquals(null, getValueAt(2, 3));
 	}
 
 	@Test
@@ -130,32 +142,32 @@ public class RecipesTableTest {
 		this.recipesTable.setRecipies(Arrays.asList(recipe1, recipe2, recipe3));
 		this.recipesTable.setRecipies(Arrays.asList(recipe1, recipe2, recipe3));
 
-		Assert.assertEquals(7, this.recipesTable.table.getColumnCount());
-		Assert.assertEquals(3, this.recipesTable.table.getRowCount());
+		Assert.assertEquals(7, this.recipesTable.table.getColumns().size());
+		Assert.assertEquals(3, this.recipesTable.table.getItems().size());
 
-		Assert.assertEquals(recipe1, this.recipesTable.table.getValueAt(0, 0));
-		Assert.assertEquals(recipe1.getIngredients().get(0), this.recipesTable.table.getValueAt(0, 1));
-		Assert.assertEquals(recipe1.getIngredients().get(1), this.recipesTable.table.getValueAt(0, 2));
-		Assert.assertEquals(null, this.recipesTable.table.getValueAt(0, 3));
-		Assert.assertEquals(recipe1.getResults().get(0), this.recipesTable.table.getValueAt(0, 4));
-		Assert.assertEquals(null, this.recipesTable.table.getValueAt(0, 5));
-		Assert.assertEquals(null, this.recipesTable.table.getValueAt(0, 6));
+		Assert.assertEquals(recipe1, getValueAt(0, 0));
+		Assert.assertEquals(recipe1.getIngredients().get(0), getValueAt(0, 1));
+		Assert.assertEquals(recipe1.getIngredients().get(1), getValueAt(0, 2));
+		Assert.assertEquals(null, getValueAt(0, 3));
+		Assert.assertEquals(recipe1.getResults().get(0), getValueAt(0, 4));
+		Assert.assertEquals(null, getValueAt(0, 5));
+		Assert.assertEquals(null, getValueAt(0, 6));
 
-		Assert.assertEquals(recipe2, this.recipesTable.table.getValueAt(1, 0));
-		Assert.assertEquals(recipe2.getIngredients().get(0), this.recipesTable.table.getValueAt(1, 1));
-		Assert.assertEquals(recipe2.getIngredients().get(1), this.recipesTable.table.getValueAt(1, 2));
-		Assert.assertEquals(recipe2.getIngredients().get(2), this.recipesTable.table.getValueAt(1, 3));
-		Assert.assertEquals(recipe2.getResults().get(0), this.recipesTable.table.getValueAt(1, 4));
-		Assert.assertEquals(recipe2.getResults().get(1), this.recipesTable.table.getValueAt(1, 5));
-		Assert.assertEquals(null, this.recipesTable.table.getValueAt(1, 6));
+		Assert.assertEquals(recipe2, getValueAt(1, 0));
+		Assert.assertEquals(recipe2.getIngredients().get(0), getValueAt(1, 1));
+		Assert.assertEquals(recipe2.getIngredients().get(1), getValueAt(1, 2));
+		Assert.assertEquals(recipe2.getIngredients().get(2), getValueAt(1, 3));
+		Assert.assertEquals(recipe2.getResults().get(0), getValueAt(1, 4));
+		Assert.assertEquals(recipe2.getResults().get(1), getValueAt(1, 5));
+		Assert.assertEquals(null, getValueAt(1, 6));
 
-		Assert.assertEquals(recipe3, this.recipesTable.table.getValueAt(2, 0));
-		Assert.assertEquals(recipe3.getIngredients().get(0), this.recipesTable.table.getValueAt(2, 1));
-		Assert.assertEquals(null, this.recipesTable.table.getValueAt(2, 2));
-		Assert.assertEquals(null, this.recipesTable.table.getValueAt(2, 3));
-		Assert.assertEquals(recipe3.getResults().get(0), this.recipesTable.table.getValueAt(2, 4));
-		Assert.assertEquals(recipe3.getResults().get(1), this.recipesTable.table.getValueAt(2, 5));
-		Assert.assertEquals(recipe3.getResults().get(2), this.recipesTable.table.getValueAt(2, 6));
+		Assert.assertEquals(recipe3, getValueAt(2, 0));
+		Assert.assertEquals(recipe3.getIngredients().get(0), getValueAt(2, 1));
+		Assert.assertEquals(null, getValueAt(2, 2));
+		Assert.assertEquals(null, getValueAt(2, 3));
+		Assert.assertEquals(recipe3.getResults().get(0), getValueAt(2, 4));
+		Assert.assertEquals(recipe3.getResults().get(1), getValueAt(2, 5));
+		Assert.assertEquals(recipe3.getResults().get(2), getValueAt(2, 6));
 	}
 
 }

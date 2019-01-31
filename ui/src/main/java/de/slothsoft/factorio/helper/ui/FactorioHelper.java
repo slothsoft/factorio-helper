@@ -1,28 +1,27 @@
 package de.slothsoft.factorio.helper.ui;
+import java.io.IOException;
 
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
-public class FactorioHelper {
+public class FactorioHelper extends Application {
 
-	static MainFrame mainFrame = new MainFrame();
+	@Override
+	public void start(Stage stage) throws IOException {
+		final FXMLLoader loader = new FXMLLoader(getClass().getResource("main.fxml"), Messages.RESOURCE_BUNDLE);
+		final Parent root = loader.load();
+		final Scene scene = new Scene(root, 900, 650);
+
+		stage.setTitle(Messages.getString("FactorioHelper"));
+		stage.setScene(scene);
+		stage.show();
+	}
 
 	public static void main(String[] args) {
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-				} catch (final Exception e) {
-					// we do not need a look and feel
-				}
-				FactorioHelper.mainFrame = new MainFrame();
-				FactorioHelper.mainFrame.open();
-			}
-		});
+		launch();
 	}
 
-	public static MainFrame getMainFrame() {
-		return FactorioHelper.mainFrame;
-	}
 }
