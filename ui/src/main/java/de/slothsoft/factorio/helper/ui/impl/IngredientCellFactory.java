@@ -12,10 +12,14 @@ public class IngredientCellFactory<T> implements Callback<TableColumn<T, Ingredi
 	private static final NumberFormat INTEGER_FORMAT = NumberFormat.getIntegerInstance();
 
 	public static String stringify(Ingredient ingredient) {
+		return stringify(ingredient.getId(), ingredient.getAmount());
+	}
+
+	public static String stringify(String recipeId, int amount) {
 		final StringBuilder sb = new StringBuilder();
-		sb.append(INTEGER_FORMAT.format(ingredient.getAmount()));
+		sb.append(INTEGER_FORMAT.format(amount));
 		sb.append("x ");
-		sb.append(RecipeCellFactory.convertIdToString(ingredient.getId()));
+		sb.append(RecipeCellFactory.convertIdToString(recipeId));
 		return sb.toString();
 	}
 

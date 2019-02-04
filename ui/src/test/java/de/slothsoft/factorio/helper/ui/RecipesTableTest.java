@@ -51,7 +51,7 @@ public class RecipesTableTest {
 	public void testSetRecipiesNull() throws Exception {
 		this.recipesTable.setRecipies(Arrays.asList());
 
-		Assert.assertEquals(1, this.recipesTable.table.getColumns().size());
+		Assert.assertEquals(0, this.recipesTable.table.getColumns().size());
 		Assert.assertEquals(0, this.recipesTable.table.getItems().size());
 	}
 

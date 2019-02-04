@@ -1,5 +1,6 @@
 package de.slothsoft.factorio.helper;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -31,6 +32,10 @@ public class Recipe {
 		return this.ingredients;
 	}
 
+	public Recipe ingredient(Ingredient newIngredient) {
+		return ingredients(Arrays.asList(newIngredient));
+	}
+
 	public Recipe ingredients(List<Ingredient> newIngredients) {
 		setIngredients(newIngredients);
 		return this;
@@ -42,6 +47,10 @@ public class Recipe {
 
 	public List<Result> getResults() {
 		return this.results;
+	}
+
+	public Recipe result(Result newResult) {
+		return results(Arrays.asList(newResult));
 	}
 
 	public Recipe results(List<Result> newResults) {

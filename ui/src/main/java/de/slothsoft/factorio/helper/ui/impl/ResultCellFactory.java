@@ -12,11 +12,15 @@ public class ResultCellFactory<T> implements Callback<TableColumn<T, Result>, Ta
 	private static final NumberFormat INTEGER_FORMAT = NumberFormat.getIntegerInstance();
 
 	public static String stringify(Result result) {
+		return stringify(result.getId(), result.getAmount());
+	}
+
+	public static String stringify(String resultId, int amount) {
 		final StringBuilder sb = new StringBuilder();
-		sb.append(RecipeCellFactory.convertIdToString(result.getId()));
-		if (result.getAmount() != 1) {
+		sb.append(RecipeCellFactory.convertIdToString(resultId));
+		if (amount != 1) {
 			// we don't need the amount if it's one
-			sb.append(" (").append(INTEGER_FORMAT.format(result.getAmount())).append(')');
+			sb.append(" (").append(INTEGER_FORMAT.format(amount)).append(')');
 		}
 		return sb.toString();
 	}

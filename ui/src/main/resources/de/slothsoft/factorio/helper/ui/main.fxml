@@ -28,10 +28,25 @@
 		</ToolBar>
 	</top>
 	<center>
-		<SplitPane BorderPane.alignment="CENTER"
-			orientation="VERTICAL">
-			<RecipesTable fx:id="recipesTable"/>
-			<TextArea />
-		</SplitPane>
+		<TabPane focusTraversable="false">
+			<Tab closable="false" text="%Dependencies">
+				<SplitPane BorderPane.alignment="CENTER"
+					orientation="VERTICAL">
+					<BorderPane>
+						<top>
+							<AutoCompleteTextField
+								fx:id="insertTextField" onAction="#insertDependency" />
+						</top>
+						<center>
+							<DependencyTree fx:id="dependencyTree" />
+						</center>
+					</BorderPane>
+					<RecipesTable fx:id="dependencySumTable" />
+				</SplitPane>
+			</Tab>
+			<Tab closable="false" text="%AllRecipes">
+				<RecipesTable fx:id="recipesTable" />
+			</Tab>
+		</TabPane>
 	</center>
 </BorderPane>
