@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -14,7 +15,6 @@ import de.slothsoft.factorio.helper.Recipe;
 import de.slothsoft.factorio.helper.Result;
 import de.slothsoft.factorio.helper.io.IOUtils;
 import de.slothsoft.factorio.helper.ui.impl.RecipeCellFactory;
-import javafx.embed.swing.JFXPanel;
 import javafx.scene.control.TreeItem;
 
 public class DependencyTreeTest {
@@ -22,12 +22,18 @@ public class DependencyTreeTest {
 	@BeforeClass
 	public static void setUpClass() throws IOException {
 		RecipeCellFactory.setRecipeI18n(IOUtils.createEmptyResourceBundle());
-		new JFXPanel();
 	}
 
 	@Rule
 	public final TestName testName = new TestName();
-	private final DependencyTree dependencyTree = new DependencyTree();
+	@Rule
+	public JavaFXThreadingRule javafxRule = new JavaFXThreadingRule();
+	private DependencyTree dependencyTree;
+
+	@Before
+	public void setUp() {
+		this.dependencyTree = new DependencyTree();
+	}
 
 	@Test
 	public void testAddDependencyDefault() throws Exception {

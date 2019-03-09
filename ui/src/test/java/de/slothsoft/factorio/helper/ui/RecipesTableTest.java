@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -15,7 +16,6 @@ import de.slothsoft.factorio.helper.Result;
 import de.slothsoft.factorio.helper.io.IOUtils;
 import de.slothsoft.factorio.helper.ui.impl.RecipeCellFactory;
 import javafx.beans.value.ObservableValue;
-import javafx.embed.swing.JFXPanel;
 import javafx.scene.control.TableColumn;
 
 public class RecipesTableTest {
@@ -23,12 +23,18 @@ public class RecipesTableTest {
 	@BeforeClass
 	public static void setUpClass() throws IOException {
 		RecipeCellFactory.setRecipeI18n(IOUtils.createEmptyResourceBundle());
-		new JFXPanel();
 	}
 
 	@Rule
 	public final TestName testName = new TestName();
-	private final RecipesTable recipesTable = new RecipesTable();
+	private RecipesTable recipesTable;
+	@Rule
+	public JavaFXThreadingRule javafxRule = new JavaFXThreadingRule();
+
+	@Before
+	public void setUp() {
+		this.recipesTable = new RecipesTable();
+	}
 
 	@Test
 	public void testSetRecipies() throws Exception {
