@@ -1,6 +1,6 @@
 # Factorio Helper (WIP)
 
-[![Build Status](https://travis-ci.org/slothsoft/factorio-helper.svg?branch=master)](https://travis-ci.org/slothsoft/factorio-helper)
+[![MIT Licence](https://img.shields.io/github/license/jenkinsci/java-client-api.svg?label=License)](http://opensource.org/licenses/MIT)[![Build Status](https://travis-ci.org/slothsoft/factorio-helper.svg?branch=master)](https://travis-ci.org/slothsoft/factorio-helper)
 
 - **Author:** [Stef Schulz](mailto:s.schulz@slothsoft.de)
 - **Repository:** <https://github.com/slothsoft/factorio-helper>
